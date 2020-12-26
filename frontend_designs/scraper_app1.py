@@ -60,7 +60,21 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "Search"))
 
     def clicked(self, text):
-      print('clicked: ', lineEdit)
+      twitterHandle = self.lineEdit.text()
+
+      font = QtGui.QFont()
+      _translate = QtCore.QCoreApplication.translate
+      font.setFamily("Javanese Text")
+      font.setPointSize(12)
+
+      self.label1 = QtWidgets.QLabel(self.centralwidget)
+      self.label1.setGeometry(QtCore.QRect(290, 30, 251, 61))
+      self.label1.setFont(font)
+      self.label1.setObjectName("label1")
+      self.label1.setText(_translate("MainWindow", "ddddddddddddddddddddddddddddddddd"))
+      # print(dir(self.label1))
+
+      print('label set')
 
 
 if __name__ == "__main__":
