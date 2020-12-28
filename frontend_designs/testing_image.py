@@ -1,26 +1,33 @@
+from PyQt5 import QtGui
+from PyQt5.QtWidgets import QApplication, QWidget, QScrollArea, QVBoxLayout, QGroupBox, QLabel, QPushButton, QFormLayout
 import sys
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel
-from PyQt5.QtCore import QCoreApplication
-import pathlib
-
-
-class MainWindow(QMainWindow):
-
-    def __init__(self):
-        super(MainWindow, self).__init__()
-        self.title = "Image Viewer"
+class Window(QWidget):
+    def __init__(self, val):
+        super().__init__()
+        self.title = "PyQt5 Scroll Bar"
+        self.top = 200
+        self.left = 500
+        self.width = 400
+        self.height = 300
+        self.setWindowIcon(QtGui.QIcon("icon.png"))
         self.setWindowTitle(self.title)
-
-        label = QLabel(self)
-        pixmap = QPixmap(str(pathlib.Path().absolute()) + '/assets/raccoon.png')
-        print()
-        label.setPixmap(pixmap)
-        self.setCentralWidget(label)
-        self.resize(pixmap.width(), pixmap.height())
-
-
-app = QApplication(sys.argv)
-w = MainWindow()
-w.show()
-sys.exit(app.exec_())
+        self.setGeometry(self.left, self.top, self.width, self.height)
+        formLayout = QFormLayout()
+        groupBox = QGroupBox("This Is Group Box")
+        labelLis = []
+        comboList = []
+        for i in  range(val):
+            labelLis.append(QLabel("Label"))
+            comboList.append(QPushButton("Click Me"))
+            formLayout.addRow(labelLis[i], comboList[i])
+        groupBox.setLayout(formLayout)
+        scroll = QScrollArea()
+        scroll.setWidget(groupBox)
+        scroll.setWidgetResizable(True)
+        scroll.setFixedHeight(400)
+        layout = QVBoxLayout(self)
+        layout.addWidget(scroll)
+        self.show()
+App = QApplication(sys.argv)
+window = Window(5)
+sys.exit(App.exec())
