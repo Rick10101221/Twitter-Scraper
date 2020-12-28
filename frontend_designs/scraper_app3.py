@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pathlib
 
 
 class Ui_MainWindow(object):
@@ -21,7 +22,7 @@ class Ui_MainWindow(object):
         self.title.setGeometry(QtCore.QRect(270, 20, 251, 61))
         font = QtGui.QFont()
         font.setFamily("Javanese Text")
-        font.setPointSize(24)
+        font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)
         self.title.setFont(font)
@@ -35,7 +36,7 @@ class Ui_MainWindow(object):
         self.subTitle.setGeometry(QtCore.QRect(280, 90, 221, 20))
         font = QtGui.QFont()
         font.setFamily("Javanese Text")
-        font.setPointSize(12)
+        font.setPointSize(9)
         self.subTitle.setFont(font)
         self.subTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.subTitle.setObjectName("subTitle")
@@ -49,7 +50,7 @@ class Ui_MainWindow(object):
         font.setPointSize(14)
         self.resultLabel.setFont(font)
         self.resultLabel.setText("")
-        self.resultLabel.setPixmap(QtGui.QPixmap("../../../../../Downloads/raccoon.png"))
+        self.resultLabel.setPixmap(QtGui.QPixmap(str(pathlib.Path().absolute()) + '/assets/raccoon.png').scaled(500, 500, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
         self.resultLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.resultLabel.setObjectName("resultLabel")
         MainWindow.setCentralWidget(self.centralwidget)
@@ -64,6 +65,8 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.searchButton.clicked.connect(lambda: self.clicked())
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -71,6 +74,12 @@ class Ui_MainWindow(object):
         self.subTitle.setText(_translate("MainWindow", "Enter a Twitter handle below"))
         self.searchButton.setText(_translate("MainWindow", "Search"))
 
+    def clicked(self):
+      twitterHandle = self.searchBar.text()
+      pixmap = QtGui.QPixmap(str(pathlib.Path().absolute()) + '/assets/red_panda.jpg').scaled(500, 500, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+      self.resultLabel.setPixmap(pixmap)
+
+      print('click complete')
 
 if __name__ == "__main__":
     import sys
