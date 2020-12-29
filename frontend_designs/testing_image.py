@@ -29,5 +29,5 @@ class Window(QWidget):
         layout.addWidget(scroll)
         self.show()
 App = QApplication(sys.argv)
-window = Window(5)
+window = Window(30)
 sys.exit(App.exec())
