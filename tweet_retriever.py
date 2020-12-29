@@ -59,17 +59,18 @@ def get_tweets(tweet_num, twitter_handle, remove_rt):
 
 """
 User input for testing
-"""
+
 input_handle = input('Enter the screen name you want to collect tweets from: ')
 input_number = int(input('\nEnter the number of tweets you want from them: '))
 input_remove_rt = int(input('\nEnter 1 to remove retweets. Otherwise, enter 0: '))
-
+"""
 
 # Call get_tweets to store list of tweets
 tweets = get_tweets(input_number, input_handle, input_remove_rt)
 
 """
 Prints all tweets retrieved and their length for testing
-"""
+
 print(*tweets, sep = '\n\n')
 print(len(tweets))
+"""
