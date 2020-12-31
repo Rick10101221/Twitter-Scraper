@@ -28,17 +28,17 @@ def get_tweets(tweet_num, twitter_handle, remove_rt):
     RT_HEADER_OFFSET = 2    # Offset between RETWEET_HEADER and retweet text
 
     recent_tweets = \
-        tweepy.Cursor(api.user_timeline, id=twitter_handle).items(tweet_num)
+        tweepy.Cursor(api.user_timeline, id=twitter_handle, tweet_mode='extended').items(tweet_num)
                             # List of specified number of recent tweets
     tweets = []             # List of tweets to return
 
     # Checks whether or not to include retweets
-    if remove_rt:
+    if not remove_rt:
         # Iterates through most recent tweets and retweets in user's timeline
         for tweet in recent_tweets:
             # If tweet is a not a retweet then include it. Otherwise, skip it.
-            if RT_HEADER != (tweet.text[:RT_HEADER_LEN]):
-                tweets.append(tweet.text)
+            if RT_HEADER != (tweet.full_text[:RT_HEADER_LEN]):
+                tweets.append(tweet.full_text)
             else:
                 continue
         # Returns list of recent tweets with retweets filtered out
@@ -49,28 +49,29 @@ def get_tweets(tweet_num, twitter_handle, remove_rt):
             If tweet is a not a retweet then include it. Otherwise, process 
             the tweet before including it
             """
-            if RT_HEADER != (tweet.text[:RT_HEADER_LEN]):
-                tweets.append(tweet.text)
+            if RT_HEADER != (tweet.full_text[:RT_HEADER_LEN]):
+                tweets.append(tweet.full_text)
             else:
-                start_index = tweet.text.find(':') + RT_HEADER_OFFSET
-                tweets.append(tweet.text[start_index:])
+                start_index = tweet.full_text.find(':') + RT_HEADER_OFFSET
+                tweets.append(tweet.full_text[start_index:])
         # Returns list of recent tweets with retweets filtered out
         return tweets
 
 """
 User input for testing
-
+"""
 input_handle = input('Enter the screen name you want to collect tweets from: ')
 input_number = int(input('\nEnter the number of tweets you want from them: '))
-input_remove_rt = int(input('\nEnter 1 to remove retweets. Otherwise, enter 0: '))
-"""
+input_remove_rt = int(input('\nEnter 1 to include retweets. Otherwise, enter 0: '))
+
 
 # Call get_tweets to store list of tweets
 tweets = get_tweets(input_number, input_handle, input_remove_rt)
 
 """
 Prints all tweets retrieved and their length for testing
+"""
 
 print(*tweets, sep = '\n\n')
 print(len(tweets))
-"""
+
