@@ -18,9 +18,12 @@ class Ui_MainWindow(object):
         font.setFamily("Comic Sans")
 
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1000, 800)
+        MainWindow.setFixedSize(1000, 800)
+        # MainWindow.resize(1000, 800)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        # Title
         self.title = QtWidgets.QLabel(self.centralwidget)
         self.title.setGeometry(QtCore.QRect(0, 20, 1000, 61))
         font.setPointSize(20)
@@ -30,7 +33,7 @@ class Ui_MainWindow(object):
         self.title.setAlignment(QtCore.Qt.AlignCenter)
         self.title.setObjectName("title")
 
-        #input_handle_prompt
+        # Twitter handle text
         font.setWeight(50)
         self.input_handle_prompt = QtWidgets.QLabel(self.centralwidget)
         self.input_handle_prompt.setGeometry(QtCore.QRect(50, 100, 600, 40))
@@ -38,48 +41,73 @@ class Ui_MainWindow(object):
         self.input_handle_prompt.setFont(font)
         self.input_handle_prompt.setAlignment(QtCore.Qt.AlignLeft)
         self.input_handle_prompt.setObjectName("input_handle_prompt")
-        #input_handle
+        # Twitter handle input
         self.input_handle = QtWidgets.QLineEdit(self.centralwidget)
         self.input_handle.setGeometry(QtCore.QRect(50, 125, 600, 31))
         self.input_handle.setText("")
         self.input_handle.setObjectName("input_handle")
 
-        #input_number_prompt
+        # Number of tweets text
         self.input_number_prompt = QtWidgets.QLabel(self.centralwidget)
         self.input_number_prompt.setGeometry(QtCore.QRect(50, 170, 600, 40))
         self.input_number_prompt.setFont(font)
         self.input_number_prompt.setAlignment(QtCore.Qt.AlignLeft)
         self.input_number_prompt.setObjectName("input_number_prompt")
-        #input_number
+        # Number of tweets input
         self.input_number = QtWidgets.QLineEdit(self.centralwidget)
         self.input_number.setGeometry(QtCore.QRect(50, 195, 250, 31))
-        self.input_number.setText("")
+        self.input_number.setText("0")
         self.input_number.setObjectName("input_number")
 
-        #input_remove_rt_prompt
+        # Checkbox text
         self.input_remove_rt_prompt = QtWidgets.QLabel(self.centralwidget)
         self.input_remove_rt_prompt.setGeometry(QtCore.QRect(50, 240, 600, 40))
         self.input_remove_rt_prompt.setFont(font)
         self.input_remove_rt_prompt.setAlignment(QtCore.Qt.AlignLeft)
         self.input_remove_rt_prompt.setObjectName("input_remove_rt_prompt")
-        #input_remove_rt
-        # self.input_remove_rt = QtWidgets.QCheckBox("Button1")
-        # self.input_remove_rt.setGeometry(QtCore.QRect(50, 285, 250, 31))
-        # self.input_remove_rt.move(50, 265)
-        # self.input_remove_rt.setObjectName("input_remove_rt")
+        # Checkbox itself
+        self.input_remove_rt = QtWidgets.QCheckBox(self.centralwidget)
+        self.input_remove_rt.move(50, 263)
+        self.input_remove_rt.setObjectName("input_remove_rt")
 
-        #searchButton
+        # SearchButton
         self.searchButton = QtWidgets.QPushButton(self.centralwidget)
         self.searchButton.setGeometry(QtCore.QRect(50, 300, 75, 23))
         self.searchButton.setObjectName("searchButton")
+
+        # Default image in result:
+        self.default_res = QtWidgets.QLabel(self.centralwidget)
+        self.default_res.setGeometry(QtCore.QRect(50, 170, 900, 40))
+        self.default_res.setAlignment(QtCore.Qt.AlignLeft)
+        self.default_res.setObjectName("default_res")
         
-        # self.resultLabel = QtWidgets.QLabel(self.centralwidget)
-        # self.resultLabel.setGeometry(QtCore.QRect(30, 200, 461, 331))
-        # self.resultLabel.setFont(font)
-        # self.resultLabel.setText("")
-        # self.resultLabel.setPixmap(QtGui.QPixmap(str(pathlib.Path().absolute()) + '/assets/raccoon.png').scaled(500, 500, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
-        # self.resultLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
-        # self.resultLabel.setObjectName("resultLabel")
+        # Result image 1
+        self.resultLabel = QtWidgets.QLabel(self.centralwidget)
+        pixmap = self.createPixMap('/assets/red_panda.jpg')
+        self.resultLabel.setPixmap(pixmap)
+        self.resultLabel.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.resultLabel.setObjectName("resultLabel")
+
+        # Scrolling
+        formLayout = QtWidgets.QFormLayout()
+        groupBox = QtWidgets.QGroupBox()
+        groupBox.setTitle("Result:")
+        groupBox.setFont(font)
+        groupBox.setStyleSheet("border:0;margin-top:10;")
+
+        # ----------------- ADD EXTRA IMAGES HERE -----------------
+        formLayout.addRow(self.default_res) 
+        formLayout.addRow(self.resultLabel)
+        # ---------------------------------------------------------
+
+        groupBox.setLayout(formLayout)
+        self.scroll = QtWidgets.QScrollArea(self.centralwidget)
+        self.scroll.setGeometry(QtCore.QRect(50, 350, 900, 331))
+        self.scroll.setWidget(groupBox)
+        self.scroll.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scroll.setObjectName('scroll')
+
+        # Miscellaneous
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
@@ -89,26 +117,47 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        # Rendering text for ui
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        # Attaching event handlers to event listeners
         self.searchButton.clicked.connect(lambda: self.clicked())
+
+    def createPixMap(self, relativeImagePath):
+      fullImagePath = f'{pathlib.Path().absolute()}{relativeImagePath}'
+      pixmap = QtGui.QPixmap(fullImagePath)
+      pixmap = pixmap.scaled(500, 500,\
+        QtCore.Qt.KeepAspectRatio,\
+        QtCore.Qt.SmoothTransformation\
+      )
+      return pixmap
+
+    def clicked(self):
+        input_handle = self.input_handle.text()
+        input_number = int(self.input_number.text())
+        input_remove_rt = self.input_remove_rt.isChecked()
+        print(f'click complete: {input_handle} {input_number} {input_remove_rt}')
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.title.setText(_translate("MainWindow", "Twitter Scraper"))
-        self.input_handle_prompt.setText(_translate("MainWindow", "Enter the screen name of the twitter account you want to collect tweets for:"))
-        self.input_number_prompt.setText(_translate("MainWindow", "Enter the number of tweets you want from them (minimum = 0, maximum = 350):"))
-        self.input_remove_rt_prompt.setText(_translate("MainWindow", "Do you want to include retweet?"))
+        self.input_handle_prompt.setText(_translate(\
+          "MainWindow",\
+          "Enter the screen name of the twitter account you want to collect tweets for:"\
+        ))
+        self.input_number_prompt.setText(_translate(\
+          "MainWindow",\
+          "Enter the number of tweets you want from them [0, 350]:"\
+        ))
+        self.input_remove_rt_prompt.setText(_translate(\
+          "MainWindow",\
+          "Do you want to include retweet?"\
+        ))
+        self.default_res.setText(_translate("MainWindow", "wow"))
         self.searchButton.setText(_translate("MainWindow", "Search"))
-
-    def clicked(self):
-        # pixmap = QtGui.QPixmap(str(pathlib.Path().absolute()) + '/assets/red_panda.jpg').scaled(500, 500, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-        # self.resultLabel.setPixmap(pixmap)
-        input_handle = self.input_handle.text()
-        input_number = int(self.input_number.text())
-        print(f'click complete: {input_handle}: {input_number}')
+        
 
 if __name__ == "__main__":
     import sys
@@ -118,3 +167,16 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
+
+# Visulization Format:
+# $self.imageLabelNUM = QtWidgets.QLabel(self.centralwidget)
+# $imageNUM = RELATIVE_IMAGE_PATH
+# $imagePathNUM = f'{pathlib.Path().absolute()}{image}'
+# $pixmapNUM = QtGui.QPixmap(imagePath)
+# $pixmapNUM = pixmapNUM.scaled(500, 500,\
+#   QtCore.Qt.KeepAspectRatio,\
+#   QtCore.Qt.SmoothTransformation
+# )
+# $self.imageLabelNUM.setPixmap(pixmap)
+# $self.imageLabelNUM.setObjectName("imageLabelNUM")
