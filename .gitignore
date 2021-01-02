@@ -2,3 +2,4 @@ commands.txt
 ./env
 api_key.py
 experimentas.py
+./__pycache__
